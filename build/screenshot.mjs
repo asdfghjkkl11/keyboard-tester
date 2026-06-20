@@ -28,13 +28,33 @@ const PAINT = `(() => {
   const n = tested.length;
   document.getElementById('count').textContent = String(n);
   document.getElementById('fill').style.width = (total ? (n/total*100) : 0) + '%';
+
+  // 키 입력 히스토리 데모 채우기 (최신이 위).
+  const histDemo = [
+    ['14:23:01.842','D'], ['14:23:01.611','S'], ['14:23:01.402','A'],
+    ['14:23:01.180','W'], ['14:23:00.905','Space'], ['14:23:00.673','Enter'],
+    ['14:23:00.441','한/영'],
+  ];
+  const hist = document.getElementById('history');
+  hist.innerHTML = '';
+  for (const [t, name] of histDemo) {
+    const row = document.createElement('div');
+    row.className = 'hist-row';
+    const ts = document.createElement('span');
+    ts.className = 'hist-time'; ts.textContent = t;
+    const nm = document.createElement('span');
+    nm.className = 'hist-key'; nm.textContent = name;
+    row.append(ts, nm);
+    hist.appendChild(row);
+  }
+  document.getElementById('hist-count').textContent = String(histDemo.length);
 })();`;
 
 app.whenReady().then(async () => {
   const win = new BrowserWindow({
     useContentSize: true,
     width: 1280,
-    height: 600,
+    height: 740,
     show: false,
     webPreferences: {
       preload: path.join(root, 'src', 'preload.js'),
