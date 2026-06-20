@@ -22,6 +22,18 @@ function createWindow() {
   });
 
   mainWindow.loadFile(path.join(__dirname, 'renderer', 'index.html'));
+
+  // 렌더러 진단: 콘솔/로드 실패를 메인 stdout 으로 끌어와 디버깅을 돕는다.
+  const wc = mainWindow.webContents;
+  wc.on('console-message', (_e, level, message, line, sourceId) => {
+    console.log(`[renderer] ${message} (${sourceId}:${line})`);
+  });
+  wc.on('did-fail-load', (_e, code, desc, url) => {
+    console.error(`[renderer] 로드 실패 ${code} ${desc} ${url}`);
+  });
+  wc.on('render-process-gone', (_e, details) => {
+    console.error('[renderer] 프로세스 종료:', details);
+  });
 }
 
 // 렌더러로 안전하게 이벤트를 보낸다 (창이 살아있을 때만).

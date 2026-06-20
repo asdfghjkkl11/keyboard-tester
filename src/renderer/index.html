@@ -3,94 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Keyboard Tester — Phase 0</title>
-    <style>
-      :root {
-        --bg: #0f1115;
-        --panel: #181b22;
-        --text: #e6e8ee;
-        --muted: #8a90a0;
-        --accent: #4ade80;
-        --error: #f87171;
-        --mono: "Cascadia Code", "Consolas", monospace;
-      }
-      * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        font-family: system-ui, sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-      }
-      header {
-        padding: 16px 20px;
-        border-bottom: 1px solid #262a33;
-      }
-      header h1 { margin: 0 0 4px; font-size: 16px; }
-      header p { margin: 0; color: var(--muted); font-size: 13px; }
-      #status {
-        margin: 12px 20px 0;
-        padding: 10px 14px;
-        border-radius: 8px;
-        background: var(--panel);
-        font-size: 13px;
-        color: var(--muted);
-      }
-      #status.error { color: var(--error); border: 1px solid var(--error); }
-      #log {
-        flex: 1;
-        margin: 12px 20px 20px;
-        padding: 12px;
-        overflow-y: auto;
-        background: var(--panel);
-        border-radius: 8px;
-        font-family: var(--mono);
-        font-size: 13px;
-        line-height: 1.6;
-      }
-      .row { display: flex; gap: 12px; }
-      .row .down { color: var(--accent); }
-      .row .up { color: var(--muted); }
-      .hint { color: var(--muted); }
-    </style>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'"
+    />
+    <title>Keyboard Tester</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header>
-      <h1>⌨️ Keyboard Tester — Phase 0 검증</h1>
-      <p>아무 키나 눌러보세요. 특히 <b>Windows 키</b>, <b>PrintScreen</b>, <b>F12</b> 가 잡히는지 확인하세요.</p>
+      <div class="title">
+        <h1>⌨️ Keyboard Tester</h1>
+        <p>모든 키를 한 번씩 눌러 정상 동작을 확인하세요. 누른 키는 초록색으로 바뀝니다.</p>
+      </div>
+      <div class="stats">
+        <div class="progress">
+          <div class="progress-meta">
+            <span>진행률</span>
+            <span><b id="count">0</b> / <span id="total">0</span></span>
+          </div>
+          <div class="bar"><span id="fill"></span></div>
+        </div>
+        <button class="reset" id="reset">초기화</button>
+      </div>
     </header>
-    <div id="status">네이티브 훅 시작 대기 중…</div>
-    <div id="log"><div class="hint">여기에 키 이벤트가 표시됩니다…</div></div>
 
-    <script>
-      const logEl = document.getElementById('log');
-      const statusEl = document.getElementById('status');
-      let count = 0;
-      const seen = new Set();
+    <div class="banner error" id="error" hidden></div>
+    <div class="banner success" id="success" hidden>
+      🎉 모든 키가 정상 입력되었습니다! 키보드에 이상이 없습니다.
+    </div>
 
-      let cleared = false;
-      function appendRow(info) {
-        if (!cleared) { logEl.innerHTML = ''; cleared = true; }
-        seen.add(info.keycode);
-        statusEl.textContent =
-          `✅ 훅 동작 중 — 이벤트 ${++count}개, 서로 다른 키 ${seen.size}개 감지됨`;
-        const row = document.createElement('div');
-        row.className = 'row';
-        const cls = info.type === 'keydown' ? 'down' : 'up';
-        row.innerHTML =
-          `<span class="${cls}">${info.type.padEnd(8)}</span>` +
-          `<span>keycode=<b>${info.keycode}</b></span>` +
-          `<span class="hint">rawcode=${info.rawcode}</span>`;
-        logEl.prepend(row);
-      }
+    <main class="board" id="board"></main>
 
-      window.keyboardAPI.onKeyEvent(appendRow);
-      window.keyboardAPI.onHookError((message) => {
-        statusEl.classList.add('error');
-        statusEl.textContent = `❌ 네이티브 훅 로드 실패: ${message}`;
-      });
-    </script>
+    <section class="unmapped">
+      <h2>미매핑 키 (레이아웃에 없는 keycode)</h2>
+      <div class="chips" id="chips"></div>
+    </section>
+
+    <script type="module" src="renderer.js"></script>
   </body>
 </html>
