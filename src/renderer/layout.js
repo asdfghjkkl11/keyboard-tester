@@ -103,7 +103,7 @@ export const MAIN_ROWS = [
     { id: 'Space', label: 'Space', code: 57, w: 6.25 },
     { id: 'HangulEnglish', label: '한/영', code: 112, w: 1.25 },
     { id: 'MetaRight', label: 'Win', code: 3676, w: 1.25 },
-    { id: 'ContextMenu', label: 'Menu', code: null, w: 1.25 },
+    { id: 'ContextMenu', label: 'Menu', code: 3677, w: 1.25 },
     { id: 'Hanja', label: '한자', code: 121, w: 1.25 },
   ],
 ];
@@ -113,7 +113,7 @@ export const NAV_ROWS = [
   [
     { id: 'PrintScreen', label: 'PrtSc', code: 3639 },
     { id: 'ScrollLock', label: 'ScrLk', code: 70 },
-    { id: 'Pause', label: 'Pause', code: null },
+    { id: 'Pause', label: 'Pause', code: 3653 },
   ],
   [sp(3)],
   [
