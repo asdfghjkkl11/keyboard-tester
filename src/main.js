@@ -7,7 +7,7 @@
 // uiohook 이 먼저 호출되어 감지한 뒤 통과시키고, 이어서 C# 훅이 return 1 로 삼킨다.
 // → 기존 감지/레이아웃은 그대로 두고 차단만 추가된다.
 
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 const os = require('node:os');
@@ -150,6 +150,8 @@ function startKeyboardHook() {
 }
 
 app.whenReady().then(async () => {
+  // 기본 메뉴바(File/Edit/View… 영어)는 키보드 테스터에 불필요하므로 제거한다.
+  Menu.setApplicationMenu(null);
   createWindow();
   // C# 차단 훅을 먼저 설치한 뒤 uiohook 을 시작해야 체인 순서가 보장된다.
   await startKeyBlocker(process.pid);
