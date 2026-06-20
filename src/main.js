@@ -27,7 +27,7 @@ function createWindow() {
     // 전체 키보드가 처음부터 다 보이도록 한다.
     useContentSize: true,
     width: 1280,
-    height: 600,
+    height: 740,
     minWidth: 1160,
     minHeight: 600,
     center: true,

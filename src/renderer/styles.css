@@ -140,9 +140,19 @@ button.reset:active { transform: translateY(1px); }
 }
 .numpad .key { width: auto; height: auto; }
 
-/* ── 미매핑 패널 ───────────────────────────── */
-.unmapped {
+/* ── 하단 패널 (히스토리 + 미매핑) ──────────── */
+.panels {
+  /* 행 높이 — 히스토리/미매핑 스크롤 높이 계산에 공통 사용 */
+  --hist-row-h: 28px;
+  display: flex;
+  gap: 16px;
   margin: 0 28px 28px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.history,
+.unmapped {
+  flex: 1 1 360px;
   padding: 14px 18px;
   background: var(--panel);
   border: 1px solid var(--panel-line);
@@ -150,7 +160,74 @@ button.reset:active { transform: translateY(1px); }
   font-size: 13px;
 }
 .unmapped h2 { margin: 0 0 8px; font-size: 13px; color: var(--muted); font-weight: 600; }
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* ── 키 입력 히스토리 ──────────────────────── */
+.panel-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 8px;
+}
+.history h2 {
+  margin: 0; font-size: 13px; color: var(--muted); font-weight: 600;
+  display: flex; align-items: center; gap: 8px;
+}
+.badge {
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 11px; font-variant-numeric: tabular-nums;
+  padding: 1px 7px; border-radius: 99px;
+  background: #1d2330; border: 1px solid var(--panel-line);
+  color: var(--text);
+}
+button.reset.small { padding: 5px 11px; font-size: 12px; }
+.hist-list {
+  /* 행 높이 × 5 + 행간(4px) × 4 → 정확히 5개만 보이고 나머지는 스크롤 */
+  display: flex; flex-direction: column; gap: 4px;
+  max-height: calc(var(--hist-row-h) * 5 + 4px * 4);
+  overflow-y: auto;
+  padding-right: 6px;
+  /* Firefox 계열 얇은 스크롤바 */
+  scrollbar-width: thin;
+  scrollbar-color: var(--key-line) transparent;
+}
+/* 스크롤 영역을 키보드로 포커스했을 때(↑↓ 스크롤) 표시 */
+.hist-list:focus-visible,
+.chips:focus-visible {
+  outline: 2px solid var(--tested);
+  outline-offset: 2px;
+}
+/* Chromium(Electron) 커스텀 스크롤바 — 히스토리 / 미매핑 공통 */
+.hist-list::-webkit-scrollbar,
+.chips::-webkit-scrollbar { width: 8px; }
+.hist-list::-webkit-scrollbar-track,
+.chips::-webkit-scrollbar-track {
+  background: transparent; border-radius: 99px;
+}
+.hist-list::-webkit-scrollbar-thumb,
+.chips::-webkit-scrollbar-thumb {
+  background: var(--key-line); border-radius: 99px;
+  border: 2px solid transparent; background-clip: padding-box;
+}
+.hist-list::-webkit-scrollbar-thumb:hover,
+.chips::-webkit-scrollbar-thumb:hover { background: #56607a; }
+.hist-row {
+  display: flex; align-items: center; gap: 10px;
+  flex: 0 0 var(--hist-row-h); height: var(--hist-row-h);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 12px;
+  padding: 0 10px; border-radius: 6px;
+  background: #1d2330; border: 1px solid var(--panel-line);
+}
+.hist-time { color: var(--muted); font-variant-numeric: tabular-nums; }
+.hist-key { font-weight: 700; color: var(--text); }
+.history .empty { color: var(--muted); }
+.chips {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  /* 히스토리 5행과 동일한 높이로 맞추고 넘치면 스크롤 */
+  max-height: calc(var(--hist-row-h) * 5 + 4px * 4);
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--key-line) transparent;
+}
 .chip {
   font-family: "Cascadia Code", Consolas, monospace;
   font-size: 12px;

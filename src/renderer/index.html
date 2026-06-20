@@ -35,10 +35,20 @@
 
     <main class="board" id="board"></main>
 
-    <section class="unmapped">
-      <h2>미매핑 키 (레이아웃에 없는 keycode)</h2>
-      <div class="chips" id="chips"></div>
-    </section>
+    <div class="panels">
+      <section class="history">
+        <div class="panel-head">
+          <h2>키 입력 히스토리 <span class="badge" id="hist-count">0</span></h2>
+          <button class="reset small" id="hist-clear">기록 지우기</button>
+        </div>
+        <div class="hist-list" id="history" tabindex="0" role="log" aria-label="키 입력 히스토리"></div>
+      </section>
+
+      <section class="unmapped">
+        <h2>미매핑 키 (레이아웃에 없는 keycode)</h2>
+        <div class="chips" id="chips" tabindex="0" role="list" aria-label="미매핑 키 목록"></div>
+      </section>
+    </div>
 
     <footer class="app-footer">© 2026 asdfghjkkl11 · MIT License</footer>
 

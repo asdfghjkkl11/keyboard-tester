@@ -3,8 +3,25 @@ import {
   NAV_ROWS,
   NUMPAD,
   CODE_TO_ID,
+  CODE_TO_LABEL,
   TESTABLE_COUNT,
+  UIOHOOK_KEY_NAMES,
 } from './layout.js';
+
+// 히스토리에 보관할 최대 항목 수.
+const MAX_HISTORY = 100;
+
+// keycode 를 사람이 읽는 이름으로 해석한다.
+// 레이아웃 라벨 → uiohook 표준 이름 → raw keycode 순으로 폴백.
+function keyName(code) {
+  return CODE_TO_LABEL.get(code) || UIOHOOK_KEY_NAMES.get(code) || `keycode ${code}`;
+}
+
+// HH:MM:SS.mmm 형식의 시각 문자열.
+function formatTime(date) {
+  const p = (n, len = 2) => String(n).padStart(len, '0');
+  return `${p(date.getHours())}:${p(date.getMinutes())}:${p(date.getSeconds())}.${p(date.getMilliseconds(), 3)}`;
+}
 
 const U_GAP = 6; // styles.css --gap 와 동일해야 함
 
@@ -20,6 +37,10 @@ const keyEls = new Map();
 const tested = new Set();
 // 레이아웃에 없는(미매핑) keycode 들
 const unmappedCodes = new Set();
+// 키 입력 히스토리 (최신이 배열 끝). { name, time }
+const history = [];
+// 현재 눌려 있는 keycode 들 — 오토리피트(키 꾹 누름) 중복 기록 방지용.
+const downCodes = new Set();
 
 function makeKey(key) {
   const el = document.createElement('div');
@@ -98,13 +119,80 @@ function renderUnmapped() {
   for (const code of unmappedCodes) {
     const chip = document.createElement('span');
     chip.className = 'chip';
-    chip.textContent = `keycode ${code}`;
+    chip.setAttribute('role', 'listitem');
+    // uiohook 이 아는 keycode 면 키 이름을 함께 보여준다 (예: F13, CtrlRight).
+    const name = UIOHOOK_KEY_NAMES.get(code);
+    chip.textContent = name ? `${name} (keycode ${code})` : `keycode ${code}`;
     chipsEl.appendChild(chip);
   }
 }
 
+// ── 키 입력 히스토리 ──────────────────────────
+const historyEl = document.getElementById('history');
+const histCountEl = document.getElementById('hist-count');
+
+// 히스토리 행 1개를 DOM 으로 만든다.
+function makeHistoryRow(entry) {
+  const row = document.createElement('div');
+  row.className = 'hist-row';
+
+  const time = document.createElement('span');
+  time.className = 'hist-time';
+  time.textContent = formatTime(entry.time);
+
+  const name = document.createElement('span');
+  name.className = 'hist-key';
+  name.textContent = entry.name;
+
+  row.append(time, name);
+  return row;
+}
+
+// 전체 재구성 — 초기화/비우기 등 일괄 갱신 시에만 사용.
+function renderHistory() {
+  histCountEl.textContent = String(history.length);
+  if (history.length === 0) {
+    historyEl.innerHTML = '<span class="empty">아직 없음 — 키를 누르면 여기 기록됩니다.</span>';
+    return;
+  }
+  historyEl.innerHTML = '';
+  // 최신이 위로 오도록 역순 렌더.
+  for (let i = history.length - 1; i >= 0; i--) {
+    historyEl.appendChild(makeHistoryRow(history[i]));
+  }
+}
+
+// 신규 항목 1개만 맨 위에 추가 — 매 입력마다 전체 재생성하지 않는다.
+function prependHistoryRow(entry) {
+  const empty = historyEl.querySelector('.empty');
+  if (empty) empty.remove();
+  historyEl.insertBefore(makeHistoryRow(entry), historyEl.firstChild);
+  // 캡 초과분 DOM 정리 (배열은 recordHistory 에서 이미 shift 됨).
+  while (historyEl.childElementCount > MAX_HISTORY) {
+    historyEl.removeChild(historyEl.lastElementChild);
+  }
+  histCountEl.textContent = String(history.length);
+}
+
+// keydown 만 기록하되, 오토리피트 반복은 무시한다(첫 눌림만).
+function recordHistory(info) {
+  if (info.type === 'keyup') {
+    downCodes.delete(info.keycode);
+    return;
+  }
+  if (downCodes.has(info.keycode)) return;
+  downCodes.add(info.keycode);
+
+  const entry = { name: keyName(info.keycode), time: new Date() };
+  history.push(entry);
+  if (history.length > MAX_HISTORY) history.shift();
+  prependHistoryRow(entry);
+}
+
 // ── 키 이벤트 처리 ────────────────────────────
 function handleKeyEvent(info) {
+  recordHistory(info);
+
   const id = CODE_TO_ID.get(info.keycode);
   if (!id) {
     if (!unmappedCodes.has(info.keycode)) {
@@ -128,6 +216,12 @@ function handleKeyEvent(info) {
   }
 }
 
+function clearHistory() {
+  history.length = 0;
+  downCodes.clear();
+  renderHistory();
+}
+
 function reset() {
   tested.clear();
   unmappedCodes.clear();
@@ -136,14 +230,17 @@ function reset() {
   }
   updateProgress();
   renderUnmapped();
+  clearHistory();
 }
 
 // ── 초기화 ────────────────────────────────────
 buildBoard();
 updateProgress();
 renderUnmapped();
+renderHistory();
 
 document.getElementById('reset').addEventListener('click', reset);
+document.getElementById('hist-clear').addEventListener('click', clearHistory);
 
 window.keyboardAPI.onKeyEvent(handleKeyEvent);
 window.keyboardAPI.onHookError((message) => {
