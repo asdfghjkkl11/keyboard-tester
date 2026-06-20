@@ -1,7 +1,7 @@
 {
   "name": "keyboard-tester",
   "version": "0.1.0",
-  "description": "물리 키보드의 모든 키가 정상 입력되는지 확인하는 Electron 데스크톱 앱",
+  "description": "키보드 테스트",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
@@ -19,7 +19,7 @@
   "license": "MIT",
   "build": {
     "appId": "com.keyboardtester.app",
-    "productName": "KeyboardTester",
+    "productName": "키보드 테스트",
     "directories": {
       "output": "dist"
     },
@@ -35,7 +35,7 @@
       "target": "portable"
     },
     "portable": {
-      "artifactName": "KeyboardTester-${version}.exe"
+      "artifactName": "키보드테스트.exe"
     }
   },
   "devDependencies": {

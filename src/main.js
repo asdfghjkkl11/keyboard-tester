@@ -28,7 +28,7 @@ function createWindow() {
     minWidth: 1160,
     minHeight: 600,
     center: true,
-    title: 'Keyboard Tester',
+    title: '키보드 테스트',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
