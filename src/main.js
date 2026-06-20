@@ -20,8 +20,14 @@ let blockerProc = null;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 900,
+    // useContentSize: 아래 크기를 (타이틀바 제외) 웹 콘텐츠 영역 기준으로 잡는다.
+    // 전체 키보드(약 1023×561)가 처음부터 다 보이도록 여유를 둔다.
+    useContentSize: true,
+    width: 1280,
     height: 600,
+    minWidth: 1160,
+    minHeight: 600,
+    center: true,
     title: 'Keyboard Tester',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
