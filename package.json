@@ -17,6 +17,27 @@
   ],
   "author": "",
   "license": "MIT",
+  "build": {
+    "appId": "com.keyboardtester.app",
+    "productName": "KeyboardTester",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "**/*.node",
+      "node_modules/uiohook-napi/**"
+    ],
+    "win": {
+      "target": "portable"
+    },
+    "portable": {
+      "artifactName": "KeyboardTester-${version}.exe"
+    }
+  },
   "devDependencies": {
     "@electron/rebuild": "^4.0.4",
     "electron": "^42.4.1",
