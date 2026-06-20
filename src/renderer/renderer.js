@@ -10,7 +10,7 @@ const U_GAP = 6; // styles.css --gap 와 동일해야 함
 
 // 키 1개의 실제 너비(유닛 + 사이 간격 보정)를 px 계산식으로 반환.
 function widthStyle(w) {
-  if (!w || w === 1) return '';
+  if (w == null || w === 1) return '';
   return `calc(var(--u) * ${w} + ${U_GAP}px * ${w - 1})`;
 }
 

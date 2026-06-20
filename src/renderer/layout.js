@@ -4,8 +4,8 @@
 //  - alt:  같은 물리 키가 보내는 다른 keycode 목록 (예: NumLock off 시 넘버패드).
 //  - w:    키 너비(유닛, 1 = 표준). 생략 시 1.
 //  - spacer: 시각적 간격용 빈 칸 (테스트 대상 아님).
-// code 가 null 인 키(Pause, Menu 등)는 uiohook 이 표준 상수를 제공하지 않아
-// 매핑 불가 → 눌리면 "미매핑" 패널에 raw 로 표시된다.
+// 모든 키에 uiohook keycode 가 매핑되어 있다(Pause=3653, Menu=3677 등 확장키 포함).
+// 레이아웃에 없는 keycode 가 들어오면 렌더러 "미매핑" 패널에 raw 로 표시된다.
 
 const sp = (w) => ({ spacer: true, w });
 
@@ -102,8 +102,8 @@ export const MAIN_ROWS = [
     { id: 'AltLeft', label: 'Alt', code: 56, w: 1.25 },
     { id: 'Space', label: 'Space', code: 57, w: 6.25 },
     { id: 'HangulEnglish', label: '한/영', code: 112, w: 1.25 },
-    { id: 'MetaRight', label: 'Win', code: 3676, w: 1.25 },
-    { id: 'ContextMenu', label: 'Fn', code: 3677, w: 1.25 },
+    { id: 'MetaRight', label: 'Fn', code: 3676, w: 1.25 },
+    { id: 'ContextMenu', label: 'Menu', code: 3677, w: 1.25 },
     { id: 'Hanja', label: '한자', code: 121, w: 1.25 },
   ],
 ];

@@ -7,7 +7,8 @@
     "start": "electron .",
     "rebuild": "electron-rebuild -f -w uiohook-napi",
     "postinstall": "electron-rebuild -f -w uiohook-napi",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "test": "node --test"
   },
   "keywords": [
     "keyboard",
