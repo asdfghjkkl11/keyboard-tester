@@ -94,16 +94,17 @@ export const MAIN_ROWS = [
     { id: 'Slash', label: '/ ?', code: 53 },
     { id: 'ShiftRight', label: 'Shift', code: 54, w: 2.75 },
   ],
-  // 최하단 행
+  // 최하단 행 (한국어 키보드 103/106키)
+  // 오른쪽 Alt 자리 = 한/영(112), 오른쪽 Ctrl 자리 = 한자(121).
   [
     { id: 'ControlLeft', label: 'Ctrl', code: 29, w: 1.25 },
     { id: 'MetaLeft', label: 'Win', code: 3675, w: 1.25 },
     { id: 'AltLeft', label: 'Alt', code: 56, w: 1.25 },
     { id: 'Space', label: 'Space', code: 57, w: 6.25 },
-    { id: 'AltRight', label: 'Alt', code: 3640, w: 1.25 },
+    { id: 'HangulEnglish', label: '한/영', code: 112, w: 1.25 },
     { id: 'MetaRight', label: 'Win', code: 3676, w: 1.25 },
     { id: 'ContextMenu', label: 'Menu', code: null, w: 1.25 },
-    { id: 'ControlRight', label: 'Ctrl', code: 3613, w: 1.25 },
+    { id: 'Hanja', label: '한자', code: 121, w: 1.25 },
   ],
 ];
 
