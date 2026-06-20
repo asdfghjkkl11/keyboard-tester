@@ -103,19 +103,19 @@ export const MAIN_ROWS = [
     { id: 'Space', label: 'Space', code: 57, w: 6.25 },
     { id: 'HangulEnglish', label: '한/영', code: 112, w: 1.25 },
     { id: 'MetaRight', label: 'Win', code: 3676, w: 1.25 },
-    { id: 'ContextMenu', label: 'Menu', code: 3677, w: 1.25 },
+    { id: 'ContextMenu', label: 'Fn', code: 3677, w: 1.25 },
     { id: 'Hanja', label: '한자', code: 121, w: 1.25 },
   ],
 ];
 
-// 내비게이션 클러스터 (PrtSc 줄 + Ins/Home/PgUp + 방향키)
+// 내비게이션 클러스터 — 메인 블록 6줄과 행 높이를 정확히 맞춘다.
+// 0:PrtSc(펑션행) 1:Ins(숫자행) 2:Del(Tab행) 3:빈(Caps행) 4:↑(Shift행) 5:방향(Ctrl행)
 export const NAV_ROWS = [
   [
     { id: 'PrintScreen', label: 'PrtSc', code: 3639 },
     { id: 'ScrollLock', label: 'ScrLk', code: 70 },
     { id: 'Pause', label: 'Pause', code: 3653 },
   ],
-  [sp(3)],
   [
     { id: 'Insert', label: 'Ins', code: 3666 },
     { id: 'Home', label: 'Home', code: 3655 },
@@ -141,28 +141,34 @@ export const NAV_ROWS = [
 
 // 넘버패드 — CSS Grid (4열). gr/gc = grid-row/column, rs/cs = row/col span.
 // alt 는 NumLock OFF 시 보내는 keycode.
+// 1행: 넘버패드 위 미디어 키 4개 (음량/음소거/계산기 — 확장키).
 export const NUMPAD = [
-  { id: 'NumLock', label: 'Num', code: 69, gr: 1, gc: 1 },
-  { id: 'NumpadDivide', label: '/', code: 3637, gr: 1, gc: 2 },
-  { id: 'NumpadMultiply', label: '*', code: 55, gr: 1, gc: 3 },
-  { id: 'NumpadSubtract', label: '-', code: 74, gr: 1, gc: 4 },
+  { id: 'AudioVolumeUp', label: '음량+', code: 57392, gr: 1, gc: 1 },
+  { id: 'AudioVolumeDown', label: '음량−', code: 57390, gr: 1, gc: 2 },
+  { id: 'AudioMute', label: '음소거', code: 57376, gr: 1, gc: 3 },
+  { id: 'LaunchCalculator', label: '계산기', code: 57377, gr: 1, gc: 4 },
 
-  { id: 'Numpad7', label: '7', code: 71, alt: [60999], gr: 2, gc: 1 },
-  { id: 'Numpad8', label: '8', code: 72, alt: [61000], gr: 2, gc: 2 },
-  { id: 'Numpad9', label: '9', code: 73, alt: [61001], gr: 2, gc: 3 },
-  { id: 'NumpadAdd', label: '+', code: 78, gr: 2, gc: 4, rs: 2 },
+  { id: 'NumLock', label: 'Num', code: 69, gr: 2, gc: 1 },
+  { id: 'NumpadDivide', label: '/', code: 3637, gr: 2, gc: 2 },
+  { id: 'NumpadMultiply', label: '*', code: 55, gr: 2, gc: 3 },
+  { id: 'NumpadSubtract', label: '-', code: 74, gr: 2, gc: 4 },
 
-  { id: 'Numpad4', label: '4', code: 75, alt: [61003], gr: 3, gc: 1 },
-  { id: 'Numpad5', label: '5', code: 76, gr: 3, gc: 2 },
-  { id: 'Numpad6', label: '6', code: 77, alt: [61005], gr: 3, gc: 3 },
+  { id: 'Numpad7', label: '7', code: 71, alt: [60999], gr: 3, gc: 1 },
+  { id: 'Numpad8', label: '8', code: 72, alt: [61000], gr: 3, gc: 2 },
+  { id: 'Numpad9', label: '9', code: 73, alt: [61001], gr: 3, gc: 3 },
+  { id: 'NumpadAdd', label: '+', code: 78, gr: 3, gc: 4, rs: 2 },
 
-  { id: 'Numpad1', label: '1', code: 79, alt: [61007], gr: 4, gc: 1 },
-  { id: 'Numpad2', label: '2', code: 80, alt: [61008], gr: 4, gc: 2 },
-  { id: 'Numpad3', label: '3', code: 81, alt: [61009], gr: 4, gc: 3 },
-  { id: 'NumpadEnter', label: 'Enter', code: 3612, gr: 4, gc: 4, rs: 2 },
+  { id: 'Numpad4', label: '4', code: 75, alt: [61003], gr: 4, gc: 1 },
+  { id: 'Numpad5', label: '5', code: 76, gr: 4, gc: 2 },
+  { id: 'Numpad6', label: '6', code: 77, alt: [61005], gr: 4, gc: 3 },
 
-  { id: 'Numpad0', label: '0', code: 82, alt: [61010], gr: 5, gc: 1, cs: 2 },
-  { id: 'NumpadDecimal', label: '.', code: 83, alt: [61011], gr: 5, gc: 3 },
+  { id: 'Numpad1', label: '1', code: 79, alt: [61007], gr: 5, gc: 1 },
+  { id: 'Numpad2', label: '2', code: 80, alt: [61008], gr: 5, gc: 2 },
+  { id: 'Numpad3', label: '3', code: 81, alt: [61009], gr: 5, gc: 3 },
+  { id: 'NumpadEnter', label: 'Enter', code: 3612, gr: 5, gc: 4, rs: 2 },
+
+  { id: 'Numpad0', label: '0', code: 82, alt: [61010], gr: 6, gc: 1, cs: 2 },
+  { id: 'NumpadDecimal', label: '.', code: 83, alt: [61011], gr: 6, gc: 3 },
 ];
 
 // 모든 테스트 대상 키를 평탄화한 배열.

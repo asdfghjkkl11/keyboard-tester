@@ -131,7 +131,7 @@ button.reset:active { transform: translateY(1px); }
   opacity: 0.7;
 }
 
-/* 넘버패드 그리드 */
+/* 넘버패드 그리드 — 1행은 미디어 키(펑션 행 높이), NumLock 행은 숫자 행에 정렬 */
 .numpad {
   display: grid;
   grid-template-columns: repeat(4, var(--u));
