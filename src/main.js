@@ -32,6 +32,8 @@ function createWindow() {
     minHeight: 600,
     center: true,
     title: '키보드 테스트',
+    // 개발 모드 창/작업표시줄 아이콘. 패키지본은 electron-builder 가 exe 에 .ico 를 박는다.
+    icon: path.join(__dirname, '..', 'build', 'icon.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
